@@ -39,7 +39,7 @@ You can use this package as a custom Symfony transport in Laravel by registering
 
 ```php
 use Illuminate\Support\Facades\Mail;
-use Postal\ApiClient\Transport\PostalApiTransportFactory;
+use Kyle\PostalMailer\Transport\PostalTransportFactory;
 use Symfony\Component\Mailer\Transport\Dsn;
 
 public function boot(): void
