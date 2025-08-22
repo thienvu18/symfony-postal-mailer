@@ -48,18 +48,18 @@ final class PostalApiTransport extends AbstractTransport
     {
         $message = new Message;
 
-        $message->from($envelope->getSender()->getAddress());
+        $message->from($envelope->getSender()->toString());
         foreach ($email->getTo() as $address) {
-            $message->to($address->getAddress());
+            $message->to($address->toString());
         }
         $message->subject($email->getSubject());
 
         foreach ($email->getCc() as $address) {
-            $message->cc($address->getAddress());
+            $message->cc($address->toString());
         }
         if ($emails = $email->getBcc()) {
             foreach ($emails as $address) {
-                $message->bcc($address->getAddress());
+                $message->bcc($address->toString());
             }
         }
         if ($email->getTextBody()) {
@@ -75,7 +75,7 @@ final class PostalApiTransport extends AbstractTransport
             $message->header($header['key'], $header['value']);
         }
         if ($emails = $email->getReplyTo()) {
-            $message->replyTo($emails[0]->getAddress());
+            $message->replyTo($emails[0]->toString());
         }
 
         return $message;
