@@ -44,20 +44,12 @@ final class PostalApiTransport extends AbstractTransport
         }
     }
 
-    /**
-     * @return Address[]
-     */
-    protected function getRecipients(Email $email, Envelope $envelope): array
-    {
-        return array_filter($envelope->getRecipients(), fn(Address $address) => false === \in_array($address, array_merge($email->getCc(), $email->getBcc()), true));
-    }
-
     private function getMessage(Email $email, Envelope $envelope): Message
     {
         $message = new Message;
 
         $message->from($envelope->getSender()->getAddress());
-        foreach ($this->getRecipients($email, $envelope) as $address) {
+        foreach ($email->getTo() as $address) {
             $message->to($address->getAddress());
         }
         $message->subject($email->getSubject());
