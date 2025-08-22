@@ -1,7 +1,6 @@
 {
     "name": "thienvu18/symfony-postal-mailer",
     "description": "Symfony Postal Mailer Bridge using Postal's PHP client",
-    "version": "1.0.0-dev",
     "type": "symfony-mailer-bridge",
     "keywords": [
         "symfony",
