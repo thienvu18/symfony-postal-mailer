@@ -17,7 +17,8 @@
     ],
     "require": {
         "php": ">=8.2",
-        "symfony/mailer": "^7.3",
+        "symfony/mailer": "^6.4|^7.3",
+        "symfony/mime": "^6.4|^7.3",
         "postal/postal": "^2.0"
     },
     "autoload": {
@@ -28,5 +29,8 @@
             "/Tests/"
         ]
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "require-dev": {
+        "phpunit/phpunit": "12.5.x-dev"
+    }
 }

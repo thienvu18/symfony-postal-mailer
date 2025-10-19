@@ -48,11 +48,16 @@ final class PostalApiTransport extends AbstractTransport
     {
         $message = new Message;
 
-        $message->from($envelope->getSender()->toString());
+        $sender = $envelope->getSender() ?? $email->getFrom()[0] ?? null;
+        if ($sender instanceof Address) {
+            $message->from($sender->toString());
+        }
         foreach ($email->getTo() as $address) {
             $message->to($address->toString());
         }
-        $message->subject($email->getSubject());
+        if (null !== $email->getSubject()) {
+            $message->subject($email->getSubject());
+        }
 
         foreach ($email->getCc() as $address) {
             $message->cc($address->toString());
@@ -68,8 +73,19 @@ final class PostalApiTransport extends AbstractTransport
         if ($email->getHtmlBody()) {
             $message->htmlBody($email->getHtmlBody());
         }
-        foreach ($email->getAttachments() as $attachment) {
-            $message->attach($attachment->getFilename(), $attachment->getContentType(), $attachment->getBody());
+        foreach ($email->getAttachments() as $index => $attachment) {
+            $filename = $attachment->getFilename() ?? \sprintf('attachment-%d', $index + 1);
+            $content = $attachment->getBody();
+
+            if (\is_resource($content)) {
+                $content = stream_get_contents($content);
+            }
+
+            if (!\is_string($content)) {
+                throw new RuntimeException('Unable to access attachment body as string.');
+            }
+
+            $message->attach($filename, $attachment->getContentType(), $content);
         }
         foreach ($this->getCustomHeaders($email) as $header) {
             $message->header($header['key'], $header['value']);
